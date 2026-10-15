@@ -248,7 +248,7 @@ static void calcstep(channel &c)
   if (!(c.status&MIXRQ_PLAYING))
     return;
   if (c.orgdiv)
-    c.step=imuldiv(imuldiv((c.step>=0)?c.orgfrq:-c.orgfrq, c.orgrate, c.orgdiv)<<8, relpitch, samprate);
+    c.step=imuldiv(imuldiv((c.step>=0)?c.orgfrq:-c.orgfrq, c.orgrate, c.orgdiv)<<8, relpitch>>4, samprate); //!!!
   else
     c.step=0;
   c.status&=~MIXRQ_INTERPOLATE;
@@ -282,7 +282,7 @@ static void calcsteps()
 static void calcspeed()
 {
   if (channelnum)
-    newtickwidth=imuldiv(256*256*256, samprate, orgspeed*relspeed);
+    newtickwidth=imuldiv(256*256*256, samprate, orgspeed*relspeed>>4);
 }
 
 static void transformvol(channel &ch)
@@ -812,6 +812,10 @@ static int GET(int ch, int opt)
     return umuldiv(cmdtimerpos, 256, samprate);
   case mcpMasterReverb:
     return masterrvb;
+  case mcpMasterPitch:
+    return relpitch;
+  case mcpMasterSpeed:
+    return relspeed;
   }
   return 0;
 }
@@ -1027,8 +1031,8 @@ static int Init(const deviceinfo &dev)
 
   restricted=0;
   amplify=65535;
-  relspeed=256;
-  relpitch=256;
+  relspeed=4096;
+  relpitch=4096;
   interpolation=0;
   mastervol=64;
   masterbal=0;

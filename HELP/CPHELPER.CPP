@@ -762,6 +762,14 @@ int brHelpKey(unsigned short key)
     brSetPage(brDecodeRef("Contents"));
 
     break;
+  case 0x1000: //alt-q
+    brSetPage(brDecodeRef("PlayerQuick"));
+
+    break;
+  case 0x2000: //alt-d
+    brSetPage(brDecodeRef("PlayerDJ"));
+
+    break;
   case 0x1700: //alt-i
     brSetPage(brDecodeRef("Index"));
 

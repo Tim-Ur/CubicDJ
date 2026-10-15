@@ -61,3 +61,5 @@
 
 'W?cpiRegisterMode$n(pn$cpimoderegstruct$$)v'
 'W?cpiGetMode$n(pna)v'
+
+'W?cuePos$ni'

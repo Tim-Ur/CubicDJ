@@ -708,7 +708,7 @@ static void timerrout()
     processtick();
     playerproc();
     cmdtimerpos+=stimerlen;
-    stimerlen=umuldiv(256, 1193046*256, orgspeed*relspeed);
+    stimerlen=umuldiv(256, 1193046*256, orgspeed*relspeed>>4);
   }
 }
 
@@ -1043,7 +1043,7 @@ static void SET(int ch, int opt, int val)
     relspeed=(val<16)?16:val;
     break;
   case mcpMasterPitch:
-    masterawepitch=mcpGetNote8363((8363*val)>>8)*4/3;
+    masterawepitch=mcpGetNote8363((8363*val)>>12)*4/3;
     break;
   case mcpMasterFilter:
     filter=val;
@@ -1063,6 +1063,11 @@ static int GET(int ch, int opt)
     return tmGetTimer();
   case mcpGCmdTimer:
     return umulshr16(cmdtimerpos, 3600);
+  case mcpMasterPitch:
+    masterawepitch=mcpGetFreq8363(masterawepitch)/8363<<10*3;
+    return masterawepitch;
+  case mcpMasterSpeed:
+    return relspeed;
   }
   return 0;
 }
@@ -1095,7 +1100,7 @@ static int OpenPlayer(int chan, void (*proc)())
     calcrevcho(channels[i]);
 
   cmdtimerpos=0;
-  stimerlen=umuldiv(256, 1193046*256, orgspeed*relspeed);
+  stimerlen=umuldiv(256, 1193046*256, orgspeed*relspeed>>4);
   stimerpos=stimerlen;
   tmInit(timerrout, (stimerpos<=65536)?stimerpos:65536, 8192);
 
@@ -1131,7 +1136,7 @@ static int inita(const deviceinfo &c)
 
   mempos=0x200000;
 
-  relspeed=256;
+  relspeed=4096;
   paused=0;
 
   mastervol=64;

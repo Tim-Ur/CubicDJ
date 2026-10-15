@@ -597,6 +597,37 @@ void writenum(short *buf, unsigned short ofs, unsigned char attr, unsigned long 
   }
 }
 
+void writenum_p(short *buf, unsigned short ofs, unsigned char attr, unsigned long num, unsigned char radix, unsigned short len, unsigned short pointPos, char clip0=1)
+{
+  char convbuf[21];
+  char *p=(char *)buf+ofs*2;
+  char *cp=convbuf+len;
+  unsigned short i;
+  for (i=0; i<len; i++)
+  {
+    if (i==pointPos)
+      *--cp="."[0];
+    else {
+      *--cp="0123456789ABCDEF"[num%radix];
+      num/=radix;
+    }
+  }
+  for (i=0; i<len; i++)
+  {
+    if (clip0&&(convbuf[i]=='0')&&(i!=(len-1)))
+    {
+      *p++=' ';
+      cp++;
+    }
+    else
+    {
+      *p++=*cp++;
+      clip0=0;
+    }
+    *p++=attr;
+  }
+}
+
 
 void writestring(short *buf, unsigned short ofs, unsigned char attr, const char *str, unsigned short len)
 {
@@ -624,6 +655,14 @@ void markstring(short *buf, unsigned short ofs, unsigned short len)
   short i;
   for (i=0; i<len; i++)
     *buf++^=0x8000;
+}
+
+void markstringattr(short *buf, unsigned char attr, unsigned short ofs, unsigned short len)
+{
+  buf+=ofs;
+  short i;
+  for (i=0; i<len; i++)
+    *buf++|=(attr<<8)&0xFF00;
 }
 
 
@@ -981,6 +1020,8 @@ char xekbhit();
 #pragma aux xekbhit modify [ah] value [al] = "mov ah,11h" "int 16h" "mov al,0" "jz nohit" "inc al" "nohit:"
 unsigned short xegetch();
 #pragma aux xegetch value [ax] = "mov ah,10h" "int 16h"
+char xegetmod();
+#pragma aux xegetmod value [al] = "mov ah,2h" "int 16h"
 
 int ekbhit()
 {
@@ -990,6 +1031,11 @@ int ekbhit()
 int egetch()
 {
  return(xegetch());
+}
+
+int egetmod()
+{
+ return(xegetmod());
 }
 
 

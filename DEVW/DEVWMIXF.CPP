@@ -245,7 +245,7 @@ static void calcstep(channel &c)
   if (!c.orgdiv)
     return;
 
-  unsigned long rstep=imuldiv(imuldiv(c.orgfrq, c.orgrate, c.orgdiv)<<8, relpitch, samprate);
+  unsigned long rstep=imuldiv(imuldiv(c.orgfrq, c.orgrate, c.orgdiv)<<8, relpitch>>4, samprate);
   freqw[n]=rstep>>16;
   freqf[n]=rstep<<16;
 
@@ -265,7 +265,7 @@ static void calcsteps()
 static void calcspeed()
 {
   if (channelnum)
-    newtickwidth=imuldiv(256*256*256, samprate, orgspeed*relspeed);
+    newtickwidth=imuldiv(256*256*256, samprate, orgspeed*relspeed>>4);
 }
 
 
@@ -301,7 +301,7 @@ static void transformvol(channel &ch)
 
 
 static void calcvol(channel &chn)
-{                                    
+{
   chn.orgvol[0]=chn.orgvolx*(0.5-chn.orgpan);
   chn.orgvol[1]=chn.orgvolx*(0.5+chn.orgpan);
   transformvol(chn);
@@ -846,6 +846,10 @@ static int GET(int ch, int opt)
     return masterrvb;
   case mcpMasterChorus:
     return masterchr;
+  case mcpMasterPitch:
+    return relpitch;
+  case mcpMasterSpeed:
+    return relspeed;
   }
   return 0;
 }
@@ -878,7 +882,7 @@ static void GetMixChannel(int ch, mixchannel &chn, int rate)
   chn.pos=smpposw[ch]-(float*)c.samp;
   chn.volfs[0]=fabs(c.vol[0]);
   chn.volfs[1]=fabs(c.vol[1]);
-  chn.step=imuldiv((freqw[ch]<<16)|(freqf[ch]>>16), samprate, rate); 
+  chn.step=imuldiv((freqw[ch]<<16)|(freqf[ch]>>16), samprate, rate);
   chn.status=MIX_PLAY32BIT;
   if (voiceflags[ch]&MIXF_MUTE)
     chn.status|=MIX_MUTE;
@@ -940,7 +944,7 @@ static int OpenPlayer(int chan, void (*proc)())
   mcpGetRealMasterVolume=plrGetRealMasterVolume;
 
   if (!mixInit(GetMixChannel, 0, chan, amplify))
-    return 0; 
+    return 0;
   mcpGetRealVolume=getrealvol;
 
 
@@ -1035,8 +1039,8 @@ static int Init(const deviceinfo &dev)
   calcinterpoltab();
 
   amplify=65535;
-  relspeed=256;
-  relpitch=256;
+  relspeed=4096;
+  relpitch=4096;
   interpolation=0;
   mastervol=64;
   masterbal=0;

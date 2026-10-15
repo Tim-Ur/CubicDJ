@@ -41,8 +41,8 @@ static int ssInit()
   per=cfGetProfileInt2(cfSoundSec, "sound", "chorus", 0, 10);
   per=cfGetProfileInt("commandline_v", "c", per, 10);
   set.chorus=(per>=100)?64:(per<=-100)?-64:(per*64/100);
-  set.speed=256;
-  set.pitch=256;
+  set.speed=4096;
+  set.pitch=4096;
 
   return errOk;
 }

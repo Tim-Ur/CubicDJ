@@ -14,9 +14,11 @@ are ^04red^07. And if you want to scroll pagewise, try ~<PgUp>~ and ~<PgDown>~.
   There are also some pages you may jump to directly with ~<Alt>~+~<Key>~ combi-
 nations. They are:
 
-  Contents Page    ~<Alt>~+~<C>~
-  Index page       ~<Alt>~+~<I>~
-  License page     ~<Alt>~+~<L>~
+  {PlayerQuick,Quickhelp (old help)} ~<Alt>~+~<Q>~
+  {PlayerDJ,DJ Functions}         ~<Alt>~+~<D>~
+  Contents Page        ~<Alt>~+~<C>~
+  Index page           ~<Alt>~+~<I>~
+  License page         ~<Alt>~+~<L>~
 
   If you want to quit help, please use one of the keys you activate it with,
 ~<H>~, ~<?>~, or ~<F1>~.
@@ -35,6 +37,7 @@ nations. They are:
   √ƒ¬ {Player,Player}
   ≥ ¿ƒ¬ƒƒ {PlayerGen,General}
   ≥   √ƒƒ {PlayerQuick,Quickhelp (old help)}
+  ≥   √ƒƒ {PlayerDJ,DJ Functions}
   ≥   √ƒƒ {PlayerGlob,Global functions}
   ≥   √ƒ¬ {PlayerText,Text mode functions}
   ≥   ≥ ¿ƒ¬ƒƒ {TXMChan,Channels}
@@ -870,135 +873,188 @@ following list will explain every entry.
   You can use all these keys throughout the player except in special modes.
 
   ^0f-^07 ^0fMode^07 ^0fKeys^07 ^0f-^07                                 ^0f-^07 ^0fVolume^07 ^0fKeys^07 ^0f-^07
-^0fi^07 : instruments                                     ^0fF1^07 : help                   
-^0ft^07 : track view                                 ^0fF2^07 , ^0fF3^07 : change volume (^0f+^07,^0f-^07)    
-^0fa^07 : textmode analyser                         c^0fF2^07 ,c^0fF3^07 : change amplification   
-^0fx^07 : xtended mode (i,t,a&c)                          ^0fF4^07 : surround sound         
-^0fo^07 : scopes                                     ^0fF5^07 , ^0fF6^07 : change panning (^0f,^07;^0f.^07)   
-^0fg^07 : graphic analyser (shift-^0fg^07 for big gsa)     ^0fF7^07 , ^0fF8^07 : change balance (^0f/^07,^0f*^07)   
-^0fn^07 : note dots                                  ^0fF9^07 , ^0fF10^07: change speed           
-^0fw^07 : wÅrfel mode                                ^0fF11^07, ^0fF12^07: change pitch           
-^0fm^07 : song message                               ctrl-^0fF12^07: lock pitch+speed       
-^0fh^07 : help                                        alt-^0fF2^07 : save settings (session 
+^0fi^07 : instruments                                     ^0fF1^07 : help
+^0ft^07 : track view                                 ^0fF2^07 , ^0fF3^07 : change volume (^0f+^07,^0f-^07)
+^0fa^07 : textmode analyser                         c^0fF2^07 ,c^0fF3^07 : change amplification
+^0fx^07 : xtended mode (i,t,a&c)                          ^0fF4^07 : surround sound
+^0fo^07 : scopes                                     ^0fF5^07 , ^0fF6^07 : change panning (^0f,^07;^0f.^07)
+^0fg^07 : graphic analyser (shift-^0fg^07 for big gsa)     ^0fF7^07 , ^0fF8^07 : change balance (^0f/^07,^0f*^07)
+^0fn^07 : note dots                                  ^0fF9^07 , ^0fF10^07: change speed
+^0fw^07 : wÅrfel mode                                ^0fF11^07, ^0fF12^07: change pitch
+^0fm^07 : song message                               ctrl-^0fF12^07: lock pitch+speed
+^0fh^07 : help                                        alt-^0fF2^07 : save settings (session
 ^0ff^07 : file-selector                               alt-^0fF3^07 : reset settings    only)
-^0fe^07 : echo menu / editor                          alt-^0fF4^07 : "factory defaults"     
-                                              ^0fbackspace^07: toggle interpolation   
-  ^0f-^07 ^0fModule^07 ^0fKeys^07 ^0f-^07 (ctrl!!)                     ctrl-^0f<-^07 : change filter          
-ctrl-^0f\d^07   : next pattern                                                         
-ctrl-^0f^07   : previous pattern                        ^0f-^07 ^0fChannel^07 ^0fKeys^07 ^0f-^07             
-ctrl-^0f^07   : go 8 rows up                         ^0f^07, ^0f^07 : select previous channel  
-ctrl-^0f^07   : go 8 rows down                       ^0f\d^07, ^0f^07 : select next channel      
-ctrl-^0fhome^07: restart module                       ^0f1^07..^0f0^07 : goto and toggle channel  
+^0fe^07 : echo menu / editor                          alt-^0fF4^07 : "factory defaults"
+                                              ^0fbackspace^07: toggle interpolation
+  ^0f-^07 ^0fModule^07 ^0fKeys^07 ^0f-^07 (ctrl!!)                     ctrl-^0f<-^07 : change filter
+ctrl-^0f\d^07   : next pattern
+ctrl-^0f^07   : previous pattern                        ^0f-^07 ^0fChannel^07 ^0fKeys^07 ^0f-^07
+ctrl-^0f^07   : go 8 rows up                         ^0f^07, ^0f^07 : select previous channel
+ctrl-^0f^07   : go 8 rows down                       ^0f\d^07, ^0f^07 : select next channel
+ctrl-^0fhome^07: restart module                       ^0f1^07..^0f0^07 : goto and toggle channel
                                            ctrl-^0f1^07..^0f0^07 : goto and solo channel
-  ^0f-^07 ^0fPlayer^07 ^0fKeys^07 ^0f-^07                                  ^0fq^07 : toggle selected channel  
-(c-)^0freturn^07 : play next module (fadeout)            ^0fs^07 : solo selected channl     
-  (ctrl-)^0fp^07 : pause module (immediate)       ctrl-^0fq^07/^0fs^07 : turn on all channels     
-  (ctrl-)^0fd^07 : dos-shell (no reminder)               ^0fc^07 : toggle channel mode      
-   ^0fesc^07 ^0fesc^07 : e-s-c-a-p-e                               (none/short/long/side)   
-    ^0fins^07, ^0ff^07 : file-selector                                                      
-         ^0fe^07 : echo menu / editor                                                 
-         ^0fz^07 : tog. scr. hgt. (25/50)                                             
-    ctrl-^0fz^07 : tog. scr. hgt. (25/30)                                             
-     alt-^0fz^07 : tog. scr. wid. (80/132)                                            
-     alt-^0fx^07 : norm. scr. mode (80*25)                                            
-         ^0fx^07 : xtended scr. mode (132*60)                                         
-                                                                                
-                                                                                
-                                                                                
-^0bInstrument^07 ^0bMode:^07  ^0b<i>^07                                                           
-=====================                                                           
-                                                                                
-     ^0fi^07 - toggle instrument mode  (none / short / full / \[side\])                 
+  ^0f-^07 ^0fPlayer^07 ^0fKeys^07 ^0f-^07                                  ^0fq^07 : toggle selected channel
+(c-)^0freturn^07 : play next module (fadeout)            ^0fs^07 : solo selected channl
+  (ctrl-)^0fp^07 : pause module (immediate)       ctrl-^0fq^07/^0fs^07 : turn on all channels
+  (ctrl-)^0fd^07 : dos-shell (no reminder)               ^0fc^07 : toggle channel mode
+   ^0fesc^07 ^0fesc^07 : e-s-c-a-p-e                               (none/short/long/side)
+    ^0fins^07, ^0ff^07 : file-selector
+         ^0fe^07 : echo menu / editor
+         ^0fz^07 : tog. scr. hgt. (25/50)
+    ctrl-^0fz^07 : tog. scr. hgt. (25/30)
+     alt-^0fz^07 : tog. scr. wid. (80/132)
+     alt-^0fx^07 : norm. scr. mode (80*25)
+         ^0fx^07 : xtended scr. mode (132*60)
+
+
+
+^0bInstrument^07 ^0bMode:^07  ^0b<i>^07
+=====================
+
+     ^0fi^07 - toggle instrument mode  (none / short / full / \[side\])
   ^0fpgup^07 - scroll up                         ctrl-^0fpgup^07 - scroll up fast
-  ^0fpgdn^07 - scroll down                       ctrl-^0fpgdn^07 - scroll down fast         
-  ^0fhome^07 - go to the top                         alt-^0fi^07 - clear instrument flags   
-   ^0ftab^07 - toggle show played instruments                                         
-                                                                                
-                                                                                
-                                                                                
-^0bPattern^07 ^0bView:^07  ^0b<t>^07                                                              
-==================                                                              
-                                                                                
-       ^0fspace^07 - toggle track mode (follow / manual)                              
-ctrl-^0fpgup^07/^0fdn^07 - scroll instruments (for multiview)                               
-        ^0fhome^07 - optimum channel number for current module                        
-                                                                                
-in follow mode:                                                                 
-      ^0fpgup^07/^0fup^07 - change channel number / detail level                            
-          ^0ftab^07 - toggle between notes only and notes & fx                        
-                                                                                
-in manual mode:                                                                 
-      ^0fpgup^07/^0fup^07 - scroll pattern                                                  
+  ^0fpgdn^07 - scroll down                       ctrl-^0fpgdn^07 - scroll down fast
+  ^0fhome^07 - go to the top                         alt-^0fi^07 - clear instrument flags
+   ^0ftab^07 - toggle show played instruments
+
+
+
+^0bPattern^07 ^0bView:^07  ^0b<t>^07
+==================
+
+       ^0fspace^07 - toggle track mode (follow / manual)
+ctrl-^0fpgup^07/^0fdn^07 - scroll instruments (for multiview)
+        ^0fhome^07 - optimum channel number for current module
+
+in follow mode:
+      ^0fpgup^07/^0fup^07 - change channel number / detail level
+          ^0ftab^07 - toggle between notes only and notes & fx
+
+in manual mode:
+      ^0fpgup^07/^0fup^07 - scroll pattern
   sh-^0ftab^07, ^0ftab^07 - change channel number / detail level
-                                                                                
-                                                                                
-                             ^0f-^07 ^0fChannel^07 ^0fEffects^07 ^0f-^07                                
- ^0aC-4^07 ^0a-^07 ^0aporta^07 ^0ato^07 ^0anote^07           ^09v??^07 ^09-^07 ^09set^07 ^09volume^07          ^05p??^07 ^05-^07 ^05set^07 ^05panning^07      
- ^02??^07 ^02-^07 ^02pitch^07 ^02slide^07             ^09??^07 ^09-^07 ^09volume^07 ^09slide^07        ^05??^07 ^05-^07 ^05panning^07 ^05slide^07    
- ^02Ò??^07 ^02-^07 ^02row^07 ^02pitch^07 ^02slide^07         ^09Ò??^07 ^09-^07 ^09row^07 ^09vol^07 ^09slide^07                              
- ^02\r??^07 ^02-^07 ^02porta^07 ^02to^07 ^02note^07                                                            
- ^02\~??^07 ^02-^07 ^02vibrato^07                 ^09\~??^07 ^09-^07 ^09tremolo^07             ^05\~??^07 ^05-^07 ^05panning^07 ^05vibrato^07  
- ^02\~\d?^07 ^02-^07 ^02vibrato^07 ^02speed^07                                                            
- ^02\~=?^07 ^02-^07 ^02vibrato^07 ^02waveform^07        ^09\~=?^07 ^09-^07 ^09tremolo^07 ^09waveform^07                           
- ^02??^07 ^02-^07 ^02arpeggio^07                ^09⁄??^07 ^09-^07 ^09tremor^07              ^05><^07 ^05-^07 ^05Surround^07 ^05Sound^07   
-                                                                                
- ^0fC-4^07 ^0f-^07 ^0fplay^07 ^0fnote^07               ^04d??^07 ^04-^07 ^04delay^07                                      
- i?? - set instrument          ^04??^07 ^04-^07 ^04retrigger^07                                  
- off - key off                 ^04\d??^07 ^04-^07 ^04sample^07 ^04offset^07                              
- \d?? - set envelope position   ^04\^??^07 ^04-^07 ^04note^07 ^04cut^07                                   
-                                                                                
-                                                                                
-                              ^0f-^07 ^0fGlobal^07 ^0fEffects^07 ^0f-^07                                
+
+
+                             ^0f-^07 ^0fChannel^07 ^0fEffects^07 ^0f-^07
+ ^0aC-4^07 ^0a-^07 ^0aporta^07 ^0ato^07 ^0anote^07           ^09v??^07 ^09-^07 ^09set^07 ^09volume^07          ^05p??^07 ^05-^07 ^05set^07 ^05panning^07
+ ^02??^07 ^02-^07 ^02pitch^07 ^02slide^07             ^09??^07 ^09-^07 ^09volume^07 ^09slide^07        ^05??^07 ^05-^07 ^05panning^07 ^05slide^07
+ ^02Ò??^07 ^02-^07 ^02row^07 ^02pitch^07 ^02slide^07         ^09Ò??^07 ^09-^07 ^09row^07 ^09vol^07 ^09slide^07
+ ^02\r??^07 ^02-^07 ^02porta^07 ^02to^07 ^02note^07
+ ^02\~??^07 ^02-^07 ^02vibrato^07                 ^09\~??^07 ^09-^07 ^09tremolo^07             ^05\~??^07 ^05-^07 ^05panning^07 ^05vibrato^07
+ ^02\~\d?^07 ^02-^07 ^02vibrato^07 ^02speed^07
+ ^02\~=?^07 ^02-^07 ^02vibrato^07 ^02waveform^07        ^09\~=?^07 ^09-^07 ^09tremolo^07 ^09waveform^07
+ ^02??^07 ^02-^07 ^02arpeggio^07                ^09⁄??^07 ^09-^07 ^09tremor^07              ^05><^07 ^05-^07 ^05Surround^07 ^05Sound^07
+
+ ^0fC-4^07 ^0f-^07 ^0fplay^07 ^0fnote^07               ^04d??^07 ^04-^07 ^04delay^07
+ i?? - set instrument          ^04??^07 ^04-^07 ^04retrigger^07
+ off - key off                 ^04\d??^07 ^04-^07 ^04sample^07 ^04offset^07
+ \d?? - set envelope position   ^04\^??^07 ^04-^07 ^04note^07 ^04cut^07
+
+
+                              ^0f-^07 ^0fGlobal^07 ^0fEffects^07 ^0f-^07
  ^02t??^07 ^02-^07 ^02set^07 ^02tempo^07               ^09v??^07 ^09-^07 ^09global^07 ^09volume^07       ^04??^07 ^04-^07 ^04break^07 ^04pattern^07
- ^02s??^07 ^02-^07 ^02set^07 ^02bpm^07                 ^09??^07 ^09-^07 ^09global^07 ^09vol^07 ^09slide^07    ^04\d??^07 ^04-^07 ^04goto^07 ^04pattern^07     
-                                                         ^04pl?^07 ^04-^07 ^04pattern^07 ^04loop^07     
-                                                         ^04pd?^07 ^04-^07 ^04pattern^07 ^04delay^07    
-                                                                                
-                                                                                
-                                                                                
-^0bText^07 ^0bMode^07 ^0bSpectrum^07 ^0bAnalyser:^07  ^0b<a>^07                                               
-=================================                                               
-                                                                                
-      ^0ftab^07 - toggle analyser's colors                                            
-        ^0fa^07 - toggle channel mode (mixed output / single channel)                 
-     ^0fhome^07 - set maximum frequency range to appoximately 2500Hz                  
-  ^0fpgup^07/^0fdn^07 - change visible frequency range                                      
-c-^0fpgup^07/^0fdn^07 - scroll instruments (for multiview)                                  
-                                                                                
-                                                                                
-                                                                                
-^0bGraphic^07 ^0bSpectrum^07 ^0bAnalyser:^07  ^0b<g>^07                                                 
-===============================                                                 
+ ^02s??^07 ^02-^07 ^02set^07 ^02bpm^07                 ^09??^07 ^09-^07 ^09global^07 ^09vol^07 ^09slide^07    ^04\d??^07 ^04-^07 ^04goto^07 ^04pattern^07
+                                                         ^04pl?^07 ^04-^07 ^04pattern^07 ^04loop^07
+                                                         ^04pd?^07 ^04-^07 ^04pattern^07 ^04delay^07
 
-        ^0fg^07 - toggle channel mode (stereo / mono / single channel)                
-  shift-^0fg^07 - toggle screen mode (640*480 / 1024*768)                             
-    alt-^0fg^07 - toggle resolution (fast / fine)                                     
-  ^0fpgup^07/^0fdn^07 - change visible frequency range                                      
-     ^0fhome^07 - set maximum frequency to approximately 3000Hz                       
-      ^0ftab^07 - set next palette                                                    
-  alt-^0ftab^07 - set previous palette                                                
-shift-^0ftab^07 - set normal analysers palette                                        
-                                                                                
-                                                                                
-                                                                                
-^0bScopes:^07  ^0b<o>^07                                                                    
-============                                                                    
-                                                                                
-           ^0fo^07 - toggle mode (all / single scope)                                 
-  ^0ftab^07, alt-^0fo^07 - toggle triggered scopes                                          
-     ^0fpgup^07/^0fdn^07 - stretch / squeeze scope output                                   
-                                                                                
-                                                                                
 
-^0bNote^07 ^0bDots:^07 ^0b<n>^07                                                                  
-==============                                                                  
-                                                                                
-           ^0fn^07 - toggle mode (dots/bars/s.cones/s.dots)                           
-         ^0fpg^07 - slide range                                                      
-    ctrl-^0fpg^07 - slide scale                                                      
-        ^0fhome^07 - reset range and scale                                            
+
+^0bText^07 ^0bMode^07 ^0bSpectrum^07 ^0bAnalyser:^07  ^0b<a>^07
+=================================
+
+      ^0ftab^07 - toggle analyser's colors
+        ^0fa^07 - toggle channel mode (mixed output / single channel)
+     ^0fhome^07 - set maximum frequency range to appoximately 2500Hz
+  ^0fpgup^07/^0fdn^07 - change visible frequency range
+c-^0fpgup^07/^0fdn^07 - scroll instruments (for multiview)
+
+
+
+^0bGraphic^07 ^0bSpectrum^07 ^0bAnalyser:^07  ^0b<g>^07
+===============================
+
+        ^0fg^07 - toggle channel mode (stereo / mono / single channel)
+  shift-^0fg^07 - toggle screen mode (640*480 / 1024*768)
+    alt-^0fg^07 - toggle resolution (fast / fine)
+  ^0fpgup^07/^0fdn^07 - change visible frequency range
+     ^0fhome^07 - set maximum frequency to approximately 3000Hz
+      ^0ftab^07 - set next palette
+  alt-^0ftab^07 - set previous palette
+shift-^0ftab^07 - set normal analysers palette
+
+
+
+^0bScopes:^07  ^0b<o>^07
+============
+
+           ^0fo^07 - toggle mode (all / single scope)
+  ^0ftab^07, alt-^0fo^07 - toggle triggered scopes
+     ^0fpgup^07/^0fdn^07 - stretch / squeeze scope output
+
+
+
+^0bNote^07 ^0bDots:^07 ^0b<n>^07
+==============
+
+           ^0fn^07 - toggle mode (dots/bars/s.cones/s.dots)
+         ^0fpg^07 - slide range
+    ctrl-^0fpg^07 - slide scale
+        ^0fhome^07 - reset range and scale
 
   Goto previous page: "{PlayerGen,General}"
+  Goto next page: "{PlayerDJ,DJ Functions}"
+
+  {Player,Back to "Player"}
+  {Contents,Back to Contents}
+.PlayerDJ
+[Player: DJ Functions]
+
+Note: exiting playback mode (or exiting the program) is possible only after
+playback has been stopped (by pressing ^0fp^07 (pause) or ^0fctrl-p^07).
+
+
+^0bQUE^07
+===
+
+^0fspace^07      : set QUE (if not set), or go to QUE (if set)
+^0falt-space^07  : clear QUE
+^0fctrl-space^07 : set QUE on first step in current pattern
+
+
+^0bPITCH CONTROL^07
+=============
+
+^0f/^07        : pitch bend down
+^0f*^07        : pitch bend up
+^0ff9^07       : accurate pitch down
+^0f10^07       : accurate pitch up
+^0fctrl-f9^07  : fast pitch down
+^0fctrl-f10^07 : fast pitch up
+
+
+^0bSupported "devices"^07
+===================
+
+  ^0edevwMixF^07 - FPU HighQuality Software Mixer for Pentium/above CPUs,
+  ^0edevwMix^07 - Software Mixer for sample stream output via devp,
+  ^0edevwSB32^07 - Soundblaster 32 / AWE.
+
+  ^04Other devices not supported yet!^07
+
+
+^0bSupported "players"^07
+==================
+
+  ^0eGMDPlay^07  - General Modular Module Player,
+  ^0eXMPlay^07   - Module player for XM/MOD and affiliate formats,
+  ^0eITPlayer^07 - player for Impulse Tracker 2.xx modules.
+
+
+^06DJ Functions was implemented by DJ TiM^07
+^08https://github.com/Tim-Ur/CubicDJ^07
+
+
+  Goto previous page: "{PlayerQuick,Quickhelp}"
   Goto next page: "{PlayerGlob,Global functions}"
 
   {Player,Back to "Player"}
@@ -1092,7 +1148,7 @@ is registered first and so will be processed first, so I had to add a new key.
 can also add a chorus effect which is controlled via ~<Ctrl>~+~<F7>~ and
 ~<Ctrl>~+~<F8>~.
 
-  Goto previous page: "{PlayerQuick,Quickhelp (old help)}"
+  Goto previous page: "{PlayerDJ,DJ Functions}"
   Goto next page: "{PlayerText,Text mode functions}"
 
   {Player,Back to "Player"}

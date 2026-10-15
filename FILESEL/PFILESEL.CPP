@@ -1124,7 +1124,7 @@ char mifMemRead(const char *name, unsigned short size, char *ptr)
       if (isspace(argp[-1]))
         argp--;
       else
-	break;
+        break;
     *argp=0;
 
     while (ptr<endp)
@@ -2218,9 +2218,9 @@ static void fsShowDir(short firstv, short selectv, short firstp, short selectp, 
     prelpos=dirwinheight*playlist.pos/playlist.num;
 
   if (plScrWidth==132)
-    displaystr(0, 0, 0x30, "    opencp                                    file selector ][                                 (c) '94-'98 Niklas Beisert et al.    ", 132);
+    displaystr(0, 0, 0x30, "    opencp DJ                                 file selector ][                                 (c) '94-'98 Niklas Beisert et al.    ", 132);
   else
-    displaystr(0, 0, 0x30, "  opencp         file selector ][            (c) '94-'98 Niklas Beisert et al.  ", 80);
+    displaystr(0, 0, 0x30, "  opencp DJ      file selector ][            (c) '94-'98 Niklas Beisert et al.  ", 80);
   displaystr(1, 0, 0x0F, curdirpath, plScrWidth);
   displaystr(2, 0, 0x07, "컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�", plScrWidth-15);
   displaystr(2, plScrWidth-15, 0x07, "쩡컴컴컴컴컴컴�", 15);
@@ -3418,7 +3418,7 @@ static void fsSetup()
   plSetTextMode(0);
   while (1)
   {
-    displaystr(0, 0, 0x30, "  opencp      file selector setup            (c) '94-'98 Niklas Beisert et al.  ", 80);
+    displaystr(0, 0, 0x30, "  opencp DJ   file selector setup            (c) '94-'98 Niklas Beisert et al.  ", 80);
 
     displaystr(1, 0, 0x07, "1:  screen mode: ", 17);
     displaystr(1, 17, 0x0F, (fsScrType&4)?"132x":" 80x", 4);

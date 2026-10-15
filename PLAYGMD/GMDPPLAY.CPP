@@ -30,19 +30,17 @@ void mcpDrawGStrings(short (*)[132]);
 void mcpNormalize();
 int mcpSetProcessKey(unsigned short);
 
+void mcpSetFadePars(int i);
 
 extern unsigned char plChanChanged;
 extern char plPanType;
 extern char plCompoMode;
-
 
 static const char *modname;
 static const char *composer;
 
 static char currentmodname[_MAX_FNAME];
 static char currentmodext[_MAX_EXT];
-
-
 
 static long starttime;
 static long pausetime;
@@ -65,7 +63,6 @@ static void gmdMarkInsSamp(char *ins, char *samp)
     }
   }
 }
-
 
 static int mpLoadGen(gmdmodule &m, binfile &file, int type)
 {
@@ -93,16 +90,79 @@ static int mpLoadGen(gmdmodule &m, binfile &file, int type)
   return retval;
 }
 
-void mcpSetFadePars(int i);
-
 static unsigned long pausefadestart;
 static char pausefaderelspeed;
-static signed char pausefadedirect;
+static signed char pausefadedirect = 0;
+
+static unsigned short masterSpeed = 0;
+static unsigned short masterPitch = 0;
+static short bend = 0;
+static unsigned long bendClock = 0;
+static signed long bendClockDelta;
+static unsigned long bendStart = 0;
+static long add = 0;
+static unsigned short bendSpeed = 350;
+        // на сколько менять скороcть за одну секунду
+static unsigned short bendBackSpeed = 1050;
+        // на сколько менять скорость при завершении бэнда
+static unsigned long bendTimeInit = CLK_TCK * (0.2); // CLK_TCK * секунды
+static unsigned long bendTime = 0;
+        // длительноcть bend'а в clock'ах
+
+static void doBend() {
+  if (bend != 0) {
+    bendClock = clock();
+    bendClockDelta = bendClock - bendStart;
+    if (masterSpeed == 0 && masterPitch == 0) {
+      masterSpeed = mcpGet(-1, mcpMasterSpeed);
+      masterPitch = mcpGet(-1, mcpMasterPitch);
+      add = bend;
+    }
+    if (bendStart + bendTime <= bendClock)
+      bend = 0;
+    else {
+      if (add == 0)
+        add = (long)bend * (long)bendClockDelta * (long)bendSpeed / CLK_TCK;
+      if (add > 0)
+        add = (long)bendClockDelta * (long)bendSpeed / CLK_TCK;
+      if (add < 0)
+        add = - (long)bendClockDelta * (long)bendSpeed / CLK_TCK;
+      if (masterSpeed + add > 0)
+        mcpSet(-1, mcpMasterSpeed, masterSpeed + add);
+      if (masterPitch + add > 0)
+        mcpSet(-1, mcpMasterPitch, masterPitch + add);
+    }
+  } else {
+    if (masterSpeed != 0 && masterPitch != 0 && add != 0) {
+      bendClock = clock();
+      bendClockDelta = ((long)bendStart + (long)bendTime * 2) - bendClock;
+      if (add > 0)
+        add = (long)bendClockDelta * (long)bendBackSpeed / CLK_TCK;
+      if (add < 0)
+        add = - (long)bendClockDelta * (long)bendBackSpeed / CLK_TCK;
+      if (masterSpeed + add > 0)
+        mcpSet(-1, mcpMasterSpeed, masterSpeed + add);
+      if (masterPitch + add > 0)
+        mcpSet(-1, mcpMasterPitch, masterPitch + add);
+      if (bendClock >= (bendStart + bendTime * 2))
+        add = 0;
+    }
+    if (masterSpeed != 0 && masterPitch != 0 && add == 0) {
+      mcpSet(-1, mcpMasterSpeed, masterSpeed);
+      mcpSet(-1, mcpMasterPitch, masterPitch);
+      masterSpeed = 0;
+      masterPitch = 0;
+      bendTime = 0;
+    }
+  }
+}
 
 static void startpausefade()
 {
   if (plPause)
     starttime=starttime+clock()-pausetime;
+  else
+    pausetime=clock();
 
   if (pausefadedirect)
   {
@@ -157,7 +217,6 @@ static void dopausefade()
   mcpSetFadePars(i);
 }
 
-
 int gmdTrkProcessKey(unsigned short key);
 void gmdChanSetup(const gmdmodule &);
 void gmdTrkSetup(const gmdmodule &m);
@@ -171,13 +230,14 @@ static void gmdDrawGStrings(short (*buf)[132])
   {
     globinfo gi;
     mpGetGlobInfo(gi);
-    writestring(buf[1],  0, 0x09, " row: ../..  ord: .../...  tempo: ..  bpm: ...  gvol: ..· ", 58);
+    writestring(buf[1],  0, 0x09, " row: ../..  ord: .../...  tempo: ..  bpm:___._ gvol: ..· ", 58);
     writenum(buf[1],  6, 0x0F, gi.currow, 16, 2, 0);
     writenum(buf[1],  9, 0x0F, gi.patlen-1, 16, 2, 0);
     writenum(buf[1], 18, 0x0F, gi.curpat, 16, 3, 0);
     writenum(buf[1], 22, 0x0F, gi.patnum-1, 16, 3, 0);
     writenum(buf[1], 34, 0x0F, gi.tempo, 16, 2, 1);
-    writenum(buf[1], 43, 0x0F, gi.speed, 10, 3, 1);
+    unsigned long masterSpeed = mcpGet(-1, mcpMasterSpeed); //4096=100%
+    writenum_p(buf[1], 42, 0x0F, gi.speed*6/gi.tempo*masterSpeed*10>>12, 10, 5, 1, 1);
     writenum(buf[1], 54, 0x0F, gi.globvol, 16, 2, 0);
     writestring(buf[1], 56, 0x0F, (gi.globvolslide==fxGVSUp)?"\x18":(gi.globvolslide==fxGVSDown)?"\x19":" ", 1);
     long tim;
@@ -200,13 +260,14 @@ static void gmdDrawGStrings(short (*buf)[132])
   {
     globinfo gi;
     mpGetGlobInfo(gi);
-    writestring(buf[1],  0, 0x09, "    row: ../..  order: .../...   tempo: ..  speed/bpm: ...   global volume: ..·  ", 81);
+    writestring(buf[1],  0, 0x09, "    row: ../..  order: .../...   tempo: ..  speed/bpm:___._  global volume: ..·  ", 81);
     writenum(buf[1],  9, 0x0F, gi.currow, 16, 2, 0);
     writenum(buf[1], 12, 0x0F, gi.patlen-1, 16, 2, 0);
     writenum(buf[1], 23, 0x0F, gi.curpat, 16, 3, 0);
     writenum(buf[1], 27, 0x0F, gi.patnum-1, 16, 3, 0);
     writenum(buf[1], 40, 0x0F, gi.tempo, 16, 2, 1);
-    writenum(buf[1], 55, 0x0F, gi.speed, 10, 3, 1);
+    unsigned long masterSpeed = mcpGet(-1, mcpMasterSpeed); // 4096=100%
+    writenum_p(buf[1], 54, 0x0F, gi.speed*6/gi.tempo*masterSpeed*10>>12, 10, 5, 1, 1);
     writenum(buf[1], 76, 0x0F, gi.globvol, 16, 2, 0);
     writestring(buf[1], 78, 0x0F, (gi.globvolslide==fxGVSUp)?"\x18":(gi.globvolslide==fxGVSDown)?"\x19":" ", 1);
     long tim;
@@ -254,19 +315,51 @@ static int gmdProcessKey(unsigned short key)
       dgetch();
     break;
 
+  case '/':  // speeddown (bend down)
+    if (bend == 0)
+      bendStart = clock();
+    else          // disable bend prolonging
+      break;
+    bendTime += bendTimeInit;
+    bend = -1;
+    break;
+  case '*':  // speedup (bend up)
+    if (bend == 0)
+      bendStart = clock();
+    else           // disable bend prolonging
+      break;
+    bendTime += bendTimeInit;
+    bend = 1;
+    break;
 
-  case 'p': case 'P':
-    startpausefade();
+  case ' ':
+    if (egetmod()>>3&1 == 1) {       // alt+space - reset CUE
+      cuePos = -1;
+      plChanChanged=1;
+    } else if (egetmod()>>2&1 == 1) {    //ctrl+space - set CUE on first row
+      mpGetPosition(pat, row);
+      cuePos=pat<<8;
+      plChanChanged=1;
+    } else {
+      if (cuePos==-1) {
+        mpGetPosition(pat, row);
+        cuePos=pat<<8|row;
+        plChanChanged=1;
+      } else {
+        mpSetPosition(cuePos >> 8, cuePos & 0xFF);
+      }
+    }
     break;
-  case 0x10:
-    pausefadedirect=0;
-    if (plPause)
-      starttime=starttime+clock()-pausetime;
-    else
-      pausetime=clock();
-    mcpSet(-1, mcpMasterPause, plPause^=1);
-    plChanChanged=1;
+
+  case 'p': case 'P': case 0x10:
+    if (egetmod()>>2&1 == 1) // ctrl+p - "vinyl" effect
+      startpausefade();
+    else {
+      mcpSet(-1, mcpMasterPause, plPause^=1);
+      plChanChanged=1;
+    }
     break;
+
   case 0x7700: //ctrl-home
     gmdInstClear();
 
@@ -324,6 +417,7 @@ static void gmdIdle()
     mcpIdle();
   if (pausefadedirect)
     dopausefade();
+  doBend();
 }
 
 static int gmdLooped()
@@ -434,7 +528,6 @@ static int gmdOpenFile(const char *path, moduleinfostruct &info, binfile *file)
   starttime=clock();
   plPause=0;
   mcpSet(-1, mcpMasterPause, 0);
-  pausefadedirect=0;
 
   gmdActive=1;
 

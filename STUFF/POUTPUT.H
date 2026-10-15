@@ -9,9 +9,11 @@ void plSetTextMode(unsigned char x);
 void plSetBarFont();
 char *convnum(unsigned long num, char *buf, unsigned char radix, unsigned short len, char clip0=1);
 void writenum(short *buf, unsigned short ofs, unsigned char attr, unsigned long num, unsigned char radix, unsigned short len, char clip0=1);
+void writenum_p(short *buf, unsigned short ofs, unsigned char attr, unsigned long num, unsigned char radix, unsigned short len, unsigned short pointPos, char clip0=1);
 void writestring(short *buf, unsigned short ofs, unsigned char attr, const char *str, unsigned short len);
 void writestringattr(short *buf, unsigned short ofs, const void *str, unsigned short len);
 void markstring(short *buf, unsigned short ofs, unsigned short len);
+void markstringattr(short *buf, unsigned char attr, unsigned short ofs, unsigned short len);
 void displaystr(unsigned short y, unsigned short x, unsigned char attr, const char *str, unsigned short len);
 void displaystrattr(unsigned short y, unsigned short x, const short *buf, unsigned short len);
 void displaystrattrdi(unsigned short y, unsigned short x, const unsigned char *txt, const unsigned char *attr, unsigned short len);
@@ -35,6 +37,7 @@ enum { vidNorm, vidVESA, vidMDA };
 
 int ekbhit();
 int egetch();
+int egetmod();
 
 #if defined(DOS32) || (defined(WIN32)&&defined(NO_POUTPUT_IMPORT))
 

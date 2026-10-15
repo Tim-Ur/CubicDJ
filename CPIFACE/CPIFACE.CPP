@@ -37,6 +37,7 @@
 #include "pmain.h"
 #include "cpiface.h"
 #include "cpipic.h"
+#include "mcp.h"
 
 #define MAXLCHAN 64
 
@@ -71,6 +72,7 @@ char plPause;
 char plCompoMode;
 char plPanType;
 
+int cuePos;
 
 static cpimoderegstruct *cpiModes;
 static cpimoderegstruct *cpiDefModes;
@@ -102,7 +104,7 @@ void cpiSetTextMode(int size)
 
 void cpiDrawGStrings()
 {
-  char *verstr="  opencp " VERSION;
+  char *verstr="  opencp DJ " VERSION;
   char *author="(c) 1994-1999 Niklas Beisert et al.  ";
   if (plScrWidth==80)
   {
@@ -369,6 +371,8 @@ static int plmpOpenFile(const char *path, moduleinfostruct &info, binfile *fi)
   plEscTick=0;
   plPause=0;
 
+  cuePos=-1;
+
   plNLChan=0;
   plNPChan=0;
   plSetMute=0;
@@ -608,7 +612,7 @@ static int plmpDrawScreen()
     if (plEscTick)
     {
       plEscTick=0;
-      if (key==27)
+      if (key==27 && plPause==1)
         return 2;
     }
 
@@ -621,7 +625,9 @@ static int plmpDrawScreen()
       plEscTick=clock();
       break;
     case 13:
-      return 3;
+      if (plPause==1)
+        return 3;
+      break;
     case 'f': case 'F': case 0x5200:
       return 4;
     case 'd': case 'D': case 4: case 0x6f00:

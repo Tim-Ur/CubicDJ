@@ -48,6 +48,7 @@ extern void (*plIdle)();
 extern void (*plSetMute)(int i, int m);
 extern int (*plGetLChanSample)(int ch, short *, int len, int rate, int opt);
 extern int (*plGetPChanSample)(int ch, short *, int len, int rate, int opt);
+extern int cuePos;
 #else
 extern_data unsigned short plNLChan;
 extern_data unsigned short plNPChan;
@@ -65,6 +66,7 @@ extern_data void (*plIdle)();
 extern_data void (*plSetMute)(int i, int m);
 extern_data int (*plGetLChanSample)(int ch, short *, int len, int rate, int opt);
 extern_data int (*plGetPChanSample)(int ch, short *, int len, int rate, int opt);
+extern_data int cuePos;
 #endif
 
 struct cpimoderegstruct

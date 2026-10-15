@@ -38,6 +38,7 @@
 #define COLMARK 0x0F
 #define COLHLAND 0xFF
 #define COLHLOR 0x88
+#define COLCUE 0x4E
 
 #else
 
@@ -263,6 +264,10 @@ struct patviewtype
 
 static void preparepatgen(int pat, const patviewtype &pt)
 {
+  // init cue variables
+  int cuerow=cuePos&0xFF;
+  int cuepat=cuePos>>8;
+
   int i;
   plPrepdPat=pat;
   int plen=getpatlen(pat);
@@ -362,8 +367,16 @@ static void preparepatgen(int pat, const patviewtype &pt)
     {
       writestringattr(plPatBuf[i+firstrow-firstprow], 0, patmask, 132);
       writenum(plPatBuf[i+firstrow-firstprow], 0, i?COLLNUM:COLHLNUM, i, 16, 2, 0);
+
       if (patwidth<=132)
         writenum(plPatBuf[i+firstrow-firstprow], patwidth-3, i?COLLNUM:COLHLNUM, i, 16, 2, 0);
+
+      // set CUE marker
+      if ((i==cuerow)&&(firstpat==cuepat)) {
+        markstringattr(plPatBuf[i+firstrow-firstprow], COLCUE, 0, 2);
+        if (patwidth<=132)
+          markstringattr(plPatBuf[i+firstrow-firstprow], COLCUE, patwidth-3, 2);
+      }
     }
 
     if (pt.gcmd)
@@ -617,6 +630,7 @@ static int gmdTrkProcessKey(unsigned short key)
       }
     }
     break;
+/*
   case ' ':
     if (plPatManualPat==-1)
     {
@@ -627,6 +641,7 @@ static int gmdTrkProcessKey(unsigned short key)
     else
       plPatManualPat=-1;
     break;
+*/
   default:
     return 0;
   }

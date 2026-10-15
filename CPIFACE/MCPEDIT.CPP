@@ -31,7 +31,7 @@ static short reverb;
 static short chorus;
 static char splock=1;
 static char viewfx=0;
-static char finespeed=8;
+static char finespeed=1;
 
 void mcpNormalize()
 {
@@ -65,7 +65,7 @@ void mcpDrawGStrings(short (*buf)[132])
       writestring(buf[0], 15, 0x09, " echo: ú  rev: -úúúnúúú+  chr: -úúúnúúú+ ", 41);
     else
       writestring(buf[0], 15, 0x09, " srnd: ú  pan: lúúúmúúúr  bal: lúúúmúúúr ", 41);
-    writestring(buf[0], 56, 0x09, " spd: ---%  pitch: ---% ", 24);
+    writestring(buf[0], 56, 0x09, " spd:---.-% pitch:---.-%", 24);
     if (splock)
       writestring(buf[0], 67, 0x09, "\x1D p", 3);
     writestring(buf[0], 6, 0x0F, "þþþþþþþþ", (vol+4)>>3);
@@ -87,8 +87,8 @@ void mcpDrawGStrings(short (*buf)[132])
       }
       writestring(buf[0], 46+((bal+70)>>4), 0x0F, "I", 1);
     }
-    writenum(buf[0], 62, 0x0F, speed*100/256, 10, 3);
-    writenum(buf[0], 75, 0x0F, pitch*100/256, 10, 3);
+    writenum_p(buf[0], 61, 0x0F, speed*1000>>12, 10, 5, 1);
+    writenum_p(buf[0], 74, 0x0F, pitch*1000>>12, 10, 5, 1);
 
     writestring(buf[1], 58, 0x09, "amp: ...% filter: ... ", 22);
     writenum(buf[1], 63, 0x0F, amp*100/64, 10, 3);
@@ -101,7 +101,7 @@ void mcpDrawGStrings(short (*buf)[132])
       writestring(buf[0], 30, 0x09, " echoactive: ú   reverb: -úúúúúúúmúúúúúúú+   chorus: -úúúúúúúmúúúúúúú+  ", 72);
     else
       writestring(buf[0], 30, 0x09, " surround: ú   panning: lúúúúúúúmúúúúúúúr   balance: lúúúúúúúmúúúúúúúr  ", 72);
-    writestring(buf[0], 102, 0x09,  " speed: ---%   pitch: ---%    ", 30);
+    writestring(buf[0], 102, 0x09,  " speed:---.-%  pitch:---.-%   ", 30);
     writestring(buf[0], 12, 0x0F, "þþþþþþþþþþþþþþþþ", (vol+2)>>2);
     if (viewfx)
     {
@@ -121,10 +121,10 @@ void mcpDrawGStrings(short (*buf)[132])
       }
       writestring(buf[0], 83+((bal+68)>>3), 0x0F, "I", 1);
     }
-    writenum(buf[0], 110, 0x0F, speed*100/256, 10, 3);
+    writenum_p(buf[0], 109, 0x0F, speed*1000>>12, 10, 5, 1);
     if (splock)
       writestring(buf[0], 115, 0x09, "\x1D", 1);
-    writenum(buf[0], 124, 0x0F, pitch*100/256, 10, 3);
+    writenum_p(buf[0], 123, 0x0F, pitch*1000>>12, 10, 5, 1);
 
     writestring(buf[1], 81, 0x09, "              amplification: ...%  filter: ...     ", 52);
     writenum(buf[1], 110, 0x0F, amp*100/64, 10, 3);
@@ -146,12 +146,12 @@ int mcpSetProcessKey(unsigned short key)
       vol+=2;
     mcpSet(-1, mcpMasterVolume, vol);
     break;
-  case '/':
+  case 0x9500: // ctrl+"/"
     if ((bal-=4)<-64)
       bal=-64;
     mcpSet(-1, mcpMasterBalance, bal);
     break;
-  case '*':
+  case 0x9600: // ctrl:"*"
     if ((bal+=4)>64)
       bal=64;
     mcpSet(-1, mcpMasterBalance, bal);
@@ -206,9 +206,23 @@ int mcpSetProcessKey(unsigned short key)
     if (splock)
       mcpSet(-1, mcpMasterPitch, pitch=speed);
     break;
+  case 0x6600: //CTRL+F9
+    if ((speed-=(finespeed<<4))<16)
+      speed=16;
+    mcpSet(-1, mcpMasterSpeed, speed);
+    if (splock)
+      mcpSet(-1, mcpMasterPitch, pitch=speed);
+    break;
   case 0x4400: //f10
-    if ((speed+=finespeed)>2048)
-      speed=2048;
+    if ((speed+=finespeed)>2048<<4)
+      speed=2048<<4;
+    mcpSet(-1, mcpMasterSpeed, speed);
+    if (splock)
+      mcpSet(-1, mcpMasterPitch, pitch=speed);
+    break;
+  case 0x6700: //CTRL+F10
+    if ((speed+=(finespeed<<4))>2048<<4)
+      speed=2048<<4;
     mcpSet(-1, mcpMasterSpeed, speed);
     if (splock)
       mcpSet(-1, mcpMasterPitch, pitch=speed);
@@ -221,8 +235,8 @@ int mcpSetProcessKey(unsigned short key)
       mcpSet(-1, mcpMasterSpeed, speed=pitch);
     break;
   case 0x8600: //f12
-    if ((pitch+=finespeed)>2048)
-      pitch=2048;
+    if ((pitch+=finespeed)>2048<<4)
+      pitch=2048<<4;
     mcpSet(-1, mcpMasterPitch, pitch);
     if (splock)
       mcpSet(-1, mcpMasterSpeed, speed=pitch);
@@ -313,4 +327,10 @@ void mcpSetFadePars(int i)
   mcpSet(-1, mcpMasterPitch, pitch*i/64);
   mcpSet(-1, mcpMasterSpeed, speed*i/64);
   mcpSet(-1, mcpMasterVolume, vol*i/64);
+}
+
+void mcpSetBendPars(int i)
+{
+  mcpSet(-1, mcpMasterPitch, pitch*i/64);
+  mcpSet(-1, mcpMasterSpeed, speed*i/64);
 }
